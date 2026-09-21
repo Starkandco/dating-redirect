@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>GitHub App Installed</title>
+</head>
+<body>
+  <h1>GitHub App Installed</h1>
+  <p>Your installation ID is:</p>
+  <h2 id="install"></h2>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("installation_id");
+    document.getElementById("install").innerText = id || "No installation_id found.";
+  </script>
+</body>
+</html>
