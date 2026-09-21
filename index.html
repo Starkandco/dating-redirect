@@ -1,18 +1,67 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>GitHub App Installed</title>
+    <meta charset="UTF-8">
+    <title>GitHub App Setup</title>
+    <style>
+        body { font-family: sans-serif; padding: 40px; max-width: 600px; margin: auto; }
+        #box { padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
+        button { padding: 10px 20px; font-size: 16px; margin-top: 20px; }
+        code { background: #eee; padding: 4px 6px; border-radius: 4px; }
+    </style>
 </head>
 <body>
-  <h1>GitHub App Installed</h1>
-  <p>Your installation ID is:</p>
-  <h2 id="install"></h2>
 
-  <script>
+<div id="box">
+    <h2>GitHub App Installed</h2>
+
+    <p id="install-text"></p>
+
+    <h3>Authorize Identity Access</h3>
+    <p>Your Godot app needs permission to read your GitHub identity.</p>
+
+    <button id="authorize-btn">Authorize Identity Access</button>
+</div>
+
+<script>
+    // Extract installation_id from URL
     const params = new URLSearchParams(window.location.search);
-    const id = params.get("installation_id");
-    document.getElementById("install").innerText = id || "No installation_id found.";
-  </script>
+    const installationId = params.get("installation_id");
+    const code = params.get("code");
+
+    // Show installation ID if present
+    const installText = document.getElementById("install-text");
+    if (installationId) {
+        installText.innerHTML = `
+            <p>Your installation ID is:</p>
+            <p><code>${installationId}</code></p>
+            <p>Paste this into your Godot app.</p>
+        `;
+    } else if (code) {
+        installText.innerHTML = `
+            <p>Identity access authorized!</p>
+            <p>You may now return to your Godot app.</p>
+        `;
+    } else {
+        installText.innerHTML = `
+            <p>No installation ID found.</p>
+        `;
+    }
+
+    // OAuth identity authorization button
+    document.getElementById("authorize-btn").onclick = () => {
+        const clientId = "YOUR_GITHUB_APP_CLIENT_ID"; // Replace this
+        const redirectUri = "https://starkandco.github.io/dating-redirect/";
+
+        const url =
+            "https://github.com/login/oauth/authorize"
+            + "?client_id=" + clientId
+            + "&redirect_uri=" + encodeURIComponent(redirectUri)
+            + "&scope=read:user";
+
+        window.location.href = url;
+    };
+</script>
+
 </body>
 </html>
